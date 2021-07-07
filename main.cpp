@@ -1,7 +1,25 @@
 #include <iostream>   
-#include <stdlib.h>     
-#include <time.h>       
+#include <cmath>       
+#include <time.h>
+#include <random>
 
+// float GetRandom(float min, float max)
+// {
+//     std::random_device r;
+//     std::default_random_engine e1(r());
+//     std::uniform_int_distribution<int> uniform_dist(min, max);
+//     return uniform_dist(e1);
+// }
+
+// float GetRandom(float max)
+// {
+//     return uniform_dist(e1);
+// }
+
+float sinRandom(float _in)
+{
+    return sin(_in *1000000 + time(NULL));
+}
 
 struct nueron
 {
@@ -34,9 +52,11 @@ class NueralNetwork
             inputSize = _inputCount;
             for(int i=0;i< _inputCount;i++)
             {
-                networkInput[i].setNueron(rand()%10-5, _hiddenLayerCount,2);
+                srand (time(NULL)+i);
+                networkInput[i].setNueron(sinRandom(float(i+1)), _hiddenLayerCount,0);
                 std::cout<< networkInput[i].value<<std::endl;
             }
+            //for(int i = 0 )
         }
     
 };
@@ -47,3 +67,4 @@ int main()
     NueralNetwork NP(4,10);
     return 0;
 }
+
