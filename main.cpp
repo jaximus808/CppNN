@@ -62,6 +62,8 @@ class NueralNetwork
 
         int *NetworkStructure;
 
+        ActivationFunction *activationFunctions;
+
         int inputSize;
         int hiddenLayerSize;
         int outputSize; 
@@ -69,18 +71,19 @@ class NueralNetwork
         /// _inputCount is the quantity of Input Nodes
         /// _hiddenLayerNodes[] is a structure of the hidden layers
         /// _hiddenLayerCollum is the quanitity of hidden layers 
-        NueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _hiddenLayerCollumn, int _outputNodesSize)
+        NueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
         {
-            //instantiate arrays of structs and ints
-            NetworkStructure = new int(_hiddenLayerCollumn+2);            
-            networkInput = new nueron[_inputCount];
-            networkHiddenCollumns = new hiddenCollum[_hiddenLayerCollumn];
-            networkOutput = new nueron[_outputNodesSize];
-
             //define sizes
-            hiddenLayerSize = _hiddenLayerCollumn;
+            hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(_hiddenLayerNodes[0])-1;
             inputSize = _inputCount;
             outputSize = _outputNodesSize;
+            //instantiate arrays of data
+            NetworkStructure = new int(hiddenLayerSize+2);            
+            networkInput = new nueron[_inputCount];
+            networkHiddenCollumns = new hiddenCollum[hiddenLayerSize];
+            networkOutput = new nueron[_outputNodesSize];
+            activationFunctions = new ActivationFunction[hiddenLayerSize+1];
+
 
             //set input nueron values 
             for(int i=0;i< _inputCount;i++)
@@ -94,34 +97,37 @@ class NueralNetwork
 
             networkHiddenCollumns[0].setHiddenCollum( _hiddenLayerNodes[0], _inputCount ); 
             
-            for(int i = 1; i < _hiddenLayerCollumn; i++)
+            for(int i = 1; i < hiddenLayerSize; i++)
             {
                 NetworkStructure[i+1] = _hiddenLayerNodes[i];
                 srand (time(NULL)+i);
                 networkHiddenCollumns[i].setHiddenCollum(_hiddenLayerNodes[i], _hiddenLayerNodes[i-1]); 
             }
-            NetworkStructure[_hiddenLayerCollumn+1] = _outputNodesSize;
+            NetworkStructure[hiddenLayerSize+1] = _outputNodesSize;
 
-
-
+            for(int i = 0; i < hiddenLayerSize+1; i++)
+            {
+                int ret = activationFunctions[i].SetActivationFunction(_activations[i]);
+                if(ret == -1) return;
+            }
             
             for(int i = 0; i < outputSize; i++)
             {
                 networkOutput[i].setNueron(0.0, 0.0, 0);
             }
-            std::cout<<0;
-            std::cout<<": ";
+            std::cout<<"Layer " <<0;
+            std::cout<<": { ";
             std::cout<<networkInput[0].value;
             for(int i = 1; i < inputSize; i++)
             {
                 std::cout<<", ";
                 std::cout<<networkInput[i].value;
             }
-            std::cout<<std::endl;
+            std::cout<<" }\n";
             for(int i = 0; i < hiddenLayerSize; i++)
             {
-                std::cout<<i+1;
-                std::cout<<": ";
+                std::cout<<"Layer "<<i+1;
+                std::cout<<": { ";
                 std::cout<<networkHiddenCollumns[i].hiddenNodes[0].value;
                 for(int y = 1;y < networkHiddenCollumns[i].hiddenNodesSize; y++)
                 {
@@ -129,16 +135,22 @@ class NueralNetwork
                     std::cout<<networkHiddenCollumns[i].hiddenNodes[y].value;
                     
                 }
-                std::cout<<std::endl;    
+                std::cout<<" }";    
+                std::cout<<" Activation Function: "<< activationFunctions[i].activationSelection;
+                std::cout << "\n";
             }
-            std::cout<<hiddenLayerSize+1;
-            std::cout<<": ";
+            std::cout<<"Layer "<<hiddenLayerSize+1;
+            std::cout<<": { ";
             std::cout<<networkOutput[0].value;
             for(int i = 1; i < outputSize; i++)
             {
                 std::cout<<", ";
                 std::cout<<networkOutput[i].value;
-            } 
+                
+            }
+            std::cout<<" }";    
+            std::cout<<" Activation Function: "<< activationFunctions[hiddenLayerSize].activationSelection;
+            std::cout << "\n";
         }
 };
 
@@ -148,7 +160,7 @@ int main()
     // std::cout<<"Define the input layers"<<std::endl;
     // int buffInput = 0;
     // std::cin >> buffInput;
-    NueralNetwork NP(4, new int[5]{4,1,2,3},4,2);
+    NueralNetwork NP(4, new int[1]{128},10,new std::string[2]{"relu","softmax"});
     return 0;
 }
 
