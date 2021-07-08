@@ -70,9 +70,10 @@ class NueralNetwork
 
 
         /// will update more later
-        /// _inputCount is the quantity of Input Nodes
-        /// _hiddenLayerNodes[] is a structure of the hidden layers
-        /// _hiddenLayerCollum is the quanitity of hidden layers 
+        /// _inputCount: The quantity of input nuerons
+        /// _hiddenLayerNodes: An integer array of the quantity of nodes in each hidden layer
+        /// _outputNodeSize: The quanityt of output nuerons
+        /// _activations: An Array of strings that consist of the name of each activation functions in each
         void SetNueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
         {
             //define sizes
