@@ -68,10 +68,12 @@ class NueralNetwork
         int hiddenLayerSize;
         int outputSize; 
 
+
+        /// will update more later
         /// _inputCount is the quantity of Input Nodes
         /// _hiddenLayerNodes[] is a structure of the hidden layers
         /// _hiddenLayerCollum is the quanitity of hidden layers 
-        NueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
+        void SetNueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
         {
             //define sizes
             hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(_hiddenLayerNodes[0]);
@@ -160,6 +162,7 @@ int main()
     // std::cout<<"Define the input layers"<<std::endl;
     // int buffInput = 0;
     // std::cin >> buffInput;
-    NueralNetwork NP(4, new int[1]{128},10,new std::string[2]{"relu","softmax"});
+    NueralNetwork NP;
+    NP.SetNueralNetwork(4, new int[1]{128},10,new std::string[2]{"relu","softmax"});
     return 0;
 }
