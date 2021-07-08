@@ -74,7 +74,7 @@ class NueralNetwork
         NueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
         {
             //define sizes
-            hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(_hiddenLayerNodes[0])-1;
+            hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(_hiddenLayerNodes[0]);
             inputSize = _inputCount;
             outputSize = _outputNodesSize;
             //instantiate arrays of data
@@ -163,4 +163,3 @@ int main()
     NueralNetwork NP(4, new int[1]{128},10,new std::string[2]{"relu","softmax"});
     return 0;
 }
-
