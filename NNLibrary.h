@@ -16,6 +16,7 @@ float random(float _max)
     return (std::abs(_rand - floor(_rand)))*_max;
 }
 
+
 class ActivationFunction
 {
     public:

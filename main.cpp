@@ -5,8 +5,6 @@
 #include "./NNLibrary.h"
 
 
-
-
 struct nueron
 {
     public:
@@ -56,6 +54,7 @@ struct hiddenCollum
 class NueralNetwork
 {
     public: 
+        int is64;
         nueron *networkInput;
         hiddenCollum *networkHiddenCollumns;
         nueron *networkOutput;
@@ -68,6 +67,42 @@ class NueralNetwork
         int hiddenLayerSize;
         int outputSize; 
 
+        //also make a method of storing the value of the weights in the NN object in a text file.
+
+        //expirmental function, if the data needs to be converted maybe use this idk lul. 
+        void GiveInput()
+        {
+
+        }
+
+        /// _inputs: gives the nueral network the inputs to the network so it can begin. If the inputs don't match the network size it will crash
+        /// for now expect the user to give the appropiate length 
+        void RunNetwork(float _inputs[])
+        {
+            //set the inputs of the input neurons
+            for(int i = 0; i < sizeof(networkInput)/sizeof(*networkInput); i++)
+            {
+                //might not need this but leave for now
+                networkInput[i].value = _inputs[i];
+                
+                //maybe have the calculations for the next layer here
+                for(int y = 0; y < networkHiddenCollumns[0].hiddenNodesSize; y++)
+                {
+                    networkHiddenCollumns[0].hiddenNodes[y].value += networkInput[i].value;
+                }
+            }
+            
+            // apply sigmoid and bias calc, maybe optimize this better
+            //for
+
+            //where the calculations actually begins
+            for(int i=0; i < hiddenLayerSize;i++)
+            {
+                for(int y=0; y < networkHiddenCollumns[0].hiddenNodesSize;y++)
+                {
+                }
+            }
+        }
 
         /// will update more later
         /// _inputCount: The quantity of input nuerons
@@ -75,9 +110,8 @@ class NueralNetwork
         /// _outputNodeSize: The quanityt of output nuerons
         /// _activations: An Array of strings that consist of the name of each activation functions in each
         void SetNueralNetwork(int _inputCount,int _hiddenLayerNodes[], int _outputNodesSize, std::string _activations[])
-        {
-            //define sizes
-            hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(_hiddenLayerNodes[0]);
+        {   
+            hiddenLayerSize = sizeof(_hiddenLayerNodes)/sizeof(*_hiddenLayerNodes);
             inputSize = _inputCount;
             outputSize = _outputNodesSize;
             //instantiate arrays of data
@@ -107,13 +141,17 @@ class NueralNetwork
                 networkHiddenCollumns[i].setHiddenCollum(_hiddenLayerNodes[i], _hiddenLayerNodes[i-1]); 
             }
             NetworkStructure[hiddenLayerSize+1] = _outputNodesSize;
-
+            
             for(int i = 0; i < hiddenLayerSize+1; i++)
             {
                 int ret = activationFunctions[i].SetActivationFunction(_activations[i]);
-                if(ret == -1) return;
+                
+                if(ret == -1)
+                {
+                    std::cout<<"error";
+                    return;
+                } 
             }
-            
             for(int i = 0; i < outputSize; i++)
             {
                 networkOutput[i].setNueron(0.0, 0.0, 0);
@@ -160,10 +198,11 @@ class NueralNetwork
 
 int main()
 {
+
     // std::cout<<"Define the input layers"<<std::endl;
     // int buffInput = 0;
     // std::cin >> buffInput;
     NueralNetwork NP;
-    NP.SetNueralNetwork(4, new int[1]{128},10,new std::string[2]{"relu","softmax"});
+    NP.SetNueralNetwork(4, new int[2]{128,7},10,new std::string[3]{"relu","relu","softmax"});
     return 0;
 }
