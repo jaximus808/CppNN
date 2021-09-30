@@ -28,11 +28,14 @@ class ActivationFunction
 {
     public:
 
+        //hiddenCollum* instanceCollum; 
+
         std::string choosableActivationFunctions[10] = {"binarystep","linear","sigmoid","tanh","relu","leakyrelu","paramrelu","exponlinunit","swish","softmax"};
          
         std::string activationSelection = ""; 
         int activationId = -1;
-        int SetActivationFunction(std::string _activationChoice)
+        // hiddenCollum actCol
+        int SetActivationFunction(std::string _activationChoice,)
         {
             std::string _modifiedString = "";
             
@@ -52,6 +55,7 @@ class ActivationFunction
                     }
                 }
                 if(missing) throw(1);
+                //instanceCollum = &actCol;
                 return 1;
             }
             catch (int i)
