@@ -2,6 +2,7 @@
 #include <random>
 #include <time.h>
 #include <chrono>
+#include <math.h>  
 
 float random(float _min, float _max)
 {
@@ -28,14 +29,12 @@ class ActivationFunction
 {
     public:
 
-        //hiddenCollum* instanceCollum; 
 
         std::string choosableActivationFunctions[10] = {"binarystep","linear","sigmoid","tanh","relu","leakyrelu","paramrelu","exponlinunit","swish","softmax"};
          
         std::string activationSelection = ""; 
         int activationId = -1;
-        // hiddenCollum actCol
-        int SetActivationFunction(std::string _activationChoice,)
+        int SetActivationFunction(std::string _activationChoice)
         {
             std::string _modifiedString = "";
             
@@ -55,7 +54,6 @@ class ActivationFunction
                     }
                 }
                 if(missing) throw(1);
-                //instanceCollum = &actCol;
                 return 1;
             }
             catch (int i)
@@ -65,62 +63,62 @@ class ActivationFunction
             }
         }
 
-        double ActivationFunctionAct(float* _nueronValue)
+        void ActivationFunctionAct(auto actCol)
         {
-            int nueronSize = sizeof(_nueronValue)/sizeof(*_nueronValue);
-            float* activatedData = new float();
-            
+            // int nueronSize = sizeof(_nueronValue)/sizeof(*_nueronValue);
+            // float* activatedData = new float();
+            float maxV = 0.0f;
+            float sum = 0.0f; 
             switch (activationId)
             {
                 //"binarystep","linear","sigmoid","tanh","relu","leakyrelu","paramrelu","exponlinunit","swish","softmax"
                 //do everything else later
                 //binarystep
                 case 0:
-                    return -1.0;
                     break;
                 //linear
                 case 1:
-                    return -1.0;
                     break;
                 //sigmnoid    
                 case 2:
-                    return -1.0;
                     break;
                 //tanh
                 case 3:
-                    return -1.0;
                     break;
                 //relu
                 case 4:
-                    for(int i = 0; i < nueronSize; i++)
+                    // for(int i = 0; i < nueronSize; i++)
+                    // {
+                    //     activatedData[i] = std::max(0.0f, _nueronValue[i]);
+                    // }
+                    // return *activatedData;
+                    for(int i = 0; i < actCol.hiddenNodesSize; i++)
                     {
-                        activatedData[i] = std::max(0.0f, _nueronValue[i]);
+                        actCol.hiddenNodes[i].value = std::max(0.0f,actCol.hiddenNodes[i].value);
                     }
-                    return *activatedData;
                     break;
                 //leakyrelu
                 case 5:
-                    return -1.0;
                     break;
                 //paramrelu
                 case 6:
-                    return -1.0;
                     break;
                 //exponlinunit
                 case 7:
-                    return -1.0;
                     break;
                 //swish
                 case 8:
-                    return -1.0;
                     break;
                 //softmax
                 case 9:
-                    return -1.0;
+                    
+                    for(int i = 0; i < actCol.hiddenNodesSize; i++) maxV = std::max(actCol.hiddenNodes[i].value, maxV);
+                    std::cout<<maxV<<std::endl;
+                    for(int i = 0; i < actCol.hiddenNodesSize; i++) sum += exp(actCol.hiddenNodes[i].value - maxV);
+                    for(int i = 0; i < actCol.hiddenNodesSize; i++) actCol.hiddenNodes[i].value = exp(actCol.hiddenNodes[i].value- maxV) / sum;
                     break;
                 default:
                     std::cout << "error";
-                    return -1.0;
                     break;
             }
         }
